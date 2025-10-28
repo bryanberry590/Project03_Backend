@@ -1,10 +1,10 @@
 package Project03.SpringbootApplication.config;
 
+import java.io.ByteArrayInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import javax.annotation.PostConstruct;
+import java.nio.charset.StandardCharsets;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -15,6 +15,8 @@ import com.google.cloud.firestore.Firestore;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.cloud.FirestoreClient;
+
+import jakarta.annotation.PostConstruct;
 
 @Configuration
 public class FirebaseConfig {
@@ -27,13 +29,20 @@ public class FirebaseConfig {
         try {
             InputStream serviceAccount;
             
-            // Try to load from file system first (for Docker/local)
-            try {
-                serviceAccount = new FileInputStream(firebaseConfigPath);
-            } catch (Exception e) {
-                // Fall back to classpath (for Heroku)
-                serviceAccount = getClass().getClassLoader()
-                    .getResourceAsStream(firebaseConfigPath);
+            // Check for environment variable first (Heroku)
+            String firebaseConfigEnv = System.getenv("FIREBASE_CONFIG");
+            if (firebaseConfigEnv != null && !firebaseConfigEnv.isEmpty()) {
+                serviceAccount = new ByteArrayInputStream(
+                    firebaseConfigEnv.getBytes(StandardCharsets.UTF_8)
+                );
+            } else {
+                // Local file system or classpath
+                try {
+                    serviceAccount = new FileInputStream(firebaseConfigPath);
+                } catch (Exception e) {
+                    serviceAccount = getClass().getClassLoader()
+                        .getResourceAsStream(firebaseConfigPath);
+                }
             }
 
             FirebaseOptions options = FirebaseOptions.builder()
