@@ -1,0 +1,54 @@
+# Version control
+.git/
+.gitignore
+.gitattributes
+
+# Documentation (not needed in container)
+README.md
+HELP.md
+*.md
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+*.iws
+*.ipr
+.project
+.classpath
+.settings/
+.springBeans
+.sts4-cache
+
+# Build artifacts (except final JAR)
+.gradle/
+build/
+!build/libs/*.jar
+bin/
+out/
+target/
+
+# Test files (optional - exclude if not running tests in Docker)
+src/test/
+
+# OS files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+Thumbs.db
+Desktop.ini
+
+# Backup files
+*.backup
+*.tmp
+*.log
+
+# Docker files (Docker doesn't need its own config files)
+docker-compose.yml
+Dockerfile
+.dockerignore
+
+# Heroku files (not needed in Docker)
+Procfile
+system.properties
