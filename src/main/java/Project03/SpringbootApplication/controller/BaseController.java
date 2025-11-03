@@ -1,4 +1,4 @@
-package Project03.SpringbootApplication;
+package Project03.SpringbootApplication.controller;
 
 import java.util.HashMap;
 import java.util.Map;

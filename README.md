@@ -200,3 +200,7 @@ If you encounter issues:
 # Controllers will call helper functions from service files. An example is if you have an endpoint for products. 
 # In this case, the controller will call functions from the service file. The service file will handle interactions with firebase database such as posting/deleting/getting 
 # This is a little tricky to understand for me but once we have the first real controller and service setup, we will be able to reference that and understand how they interact with firebase
+
+
+
+# Curl testing for creating users, sending friend requests, and accepting friend requests: run the command ./test_friends.sh
