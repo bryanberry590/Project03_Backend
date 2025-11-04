@@ -200,3 +200,12 @@ If you encounter issues:
 # Controllers will call helper functions from service files. An example is if you have an endpoint for products. 
 # In this case, the controller will call functions from the service file. The service file will handle interactions with firebase database such as posting/deleting/getting 
 # This is a little tricky to understand for me but once we have the first real controller and service setup, we will be able to reference that and understand how they interact with firebase
+
+
+
+# Curl testing for all tables created in the backend are in curl_tests folder: run the command ./curl_tests/test_file_name.sh
+
+# From project root directory
+# ./tests/test_friends.sh
+# ./tests/test_events.sh
+# ./tests/test_user_prefs.sh
