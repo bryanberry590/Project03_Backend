@@ -203,4 +203,9 @@ If you encounter issues:
 
 
 
-# Curl testing for creating users, sending friend requests, and accepting friend requests: run the command ./test_friends.sh and ./test_events.sh
+# Curl testing for all tables created in the backend are in curl_tests folder: run the command ./curl_tests/test_file_name.sh
+
+# From project root directory
+# ./tests/test_friends.sh
+# ./tests/test_events.sh
+# ./tests/test_user_prefs.sh

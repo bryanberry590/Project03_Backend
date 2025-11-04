@@ -284,7 +284,70 @@ public class BaseController {
                             </tbody>
                         </table>
                     </div>
-
+                    <div class="section">
+                        <h2>⚙️ User Preferences Routes</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Method</th>
+                                    <th>Route</th>
+                                    <th>Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="method post">POST</span></td>
+                                    <td class="route">/api/user-prefs</td>
+                                    <td>Create user preferences with custom values</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method post">POST</span></td>
+                                    <td class="route">/api/user-prefs/default</td>
+                                    <td>Create user preferences with default values</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method get">GET</span></td>
+                                    <td class="route">/api/user-prefs/user/{userId}</td>
+                                    <td>Get user preferences by user ID</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method get">GET</span></td>
+                                    <td class="route">/api/user-prefs/{id}</td>
+                                    <td>Get user preferences by prefs ID</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method put">PUT</span></td>
+                                    <td class="route">/api/user-prefs/user/{userId}</td>
+                                    <td>Update multiple preference fields</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method put">PUT</span></td>
+                                    <td class="route">/api/user-prefs/user/{userId}/theme</td>
+                                    <td>Update theme only</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method put">PUT</span></td>
+                                    <td class="route">/api/user-prefs/user/{userId}/notifications</td>
+                                    <td>Update notification settings only</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method put">PUT</span></td>
+                                    <td class="route">/api/user-prefs/user/{userId}/color-scheme</td>
+                                    <td>Update color scheme only</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method delete">DELETE</span></td>
+                                    <td class="route">/api/user-prefs/user/{userId}</td>
+                                    <td>Delete user preferences</td>
+                                </tr>
+                                <tr>
+                                    <td><span class="method get">GET</span></td>
+                                    <td class="route">/api/user-prefs</td>
+                                    <td>Get all user preferences (admin)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="section">
                         <h2>🧪 Test Routes</h2>
                         <table>
