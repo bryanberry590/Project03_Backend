@@ -203,4 +203,4 @@ If you encounter issues:
 
 
 
-# Curl testing for creating users, sending friend requests, and accepting friend requests: run the command ./test_friends.sh
+# Curl testing for creating users, sending friend requests, and accepting friend requests: run the command ./test_friends.sh and ./test_events.sh
