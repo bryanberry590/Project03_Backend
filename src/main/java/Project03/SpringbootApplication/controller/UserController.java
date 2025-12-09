@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -106,5 +107,22 @@ public class UserController {
         } catch (Exception e) {
             throw new RuntimeException("Error fetching users: " + e.getMessage());
         }
+    }
+
+    /**
+     * DELETE /api/users/{id} - Delete user by ID
+     */
+    @DeleteMapping("/{id}")
+    public Map<String, Object> deleteUser(@PathVariable String id) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            String result = userService.deleteUser(id);
+            response.put("success", true);
+            response.put("message", result);
+        } catch (Exception e) {
+            response.put("success", false);
+            response.put("error", e.getMessage());
+        }
+        return response;
     }
 }

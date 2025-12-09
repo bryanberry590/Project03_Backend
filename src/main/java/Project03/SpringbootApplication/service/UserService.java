@@ -18,6 +18,7 @@ import com.google.cloud.firestore.QueryDocumentSnapshot;
 import com.google.cloud.firestore.QuerySnapshot;
 import com.google.cloud.firestore.WriteResult;
 
+
 @Service
 public class UserService {
 
@@ -150,4 +151,91 @@ public class UserService {
         }
         return users;
     }
+
+    /**
+ * Delete user by ID
+ * @param userId - The ID of the user to delete
+ * @return Success message
+ * @throws Exception if user not found or deletion fails
+ */
+public String deleteUser(String userId) throws Exception {
+    try {
+        // Check if user exists first
+        DocumentReference userRef = firestore.collection("users").document(userId);
+        DocumentSnapshot userSnapshot = userRef.get().get();
+        
+        if (!userSnapshot.exists()) {
+            throw new Exception("User not found with ID: " + userId);
+        }
+        
+        // Delete the user document
+        userRef.delete().get();
+        
+        return "User deleted successfully with ID: " + userId;
+    } catch (Exception e) {
+        throw new Exception("Error deleting user: " + e.getMessage());
+    }
+}
+
+/**
+ * BONUS: Delete all test users (users with "testuser" in username)
+ * This is useful for cleaning up Postman test data
+ */
+public Map<String, Object> deleteTestUsers() throws Exception {
+    Map<String, Object> result = new HashMap<>();
+    try {
+        // Query for all users with "testuser" in their username
+        Query query = firestore.collection("users")
+                       .whereGreaterThanOrEqualTo("username", "testuser")
+                       .whereLessThanOrEqualTo("username", "testuser" + "\uf8ff");
+        
+        ApiFuture<QuerySnapshot> querySnapshot = query.get();
+        List<QueryDocumentSnapshot> documents = querySnapshot.get().getDocuments();
+        
+        int deletedCount = 0;
+        for (QueryDocumentSnapshot document : documents) {
+            document.getReference().delete().get();
+            deletedCount++;
+        }
+        
+        result.put("success", true);
+        result.put("message", "Deleted " + deletedCount + " test users");
+        result.put("count", deletedCount);
+        
+        return result;
+    } catch (Exception e) {
+        throw new Exception("Error deleting test users: " + e.getMessage());
+    }
+}
+
+/**
+ * BONUS: Delete all users with "postman_test" in username
+ * This is useful for cleaning up static Postman test users
+ */
+public Map<String, Object> deletePostmanTestUsers() throws Exception {
+    Map<String, Object> result = new HashMap<>();
+    try {
+        // Query for all users with "postman_test" in their username
+        Query query = firestore.collection("users")
+                       .whereGreaterThanOrEqualTo("username", "postman_test")
+                       .whereLessThanOrEqualTo("username", "postman_test" + "\uf8ff");
+        
+        ApiFuture<QuerySnapshot> querySnapshot = query.get();
+        List<QueryDocumentSnapshot> documents = querySnapshot.get().getDocuments();
+        
+        int deletedCount = 0;
+        for (QueryDocumentSnapshot document : documents) {
+            document.getReference().delete().get();
+            deletedCount++;
+        }
+        
+        result.put("success", true);
+        result.put("message", "Deleted " + deletedCount + " Postman test users");
+        result.put("count", deletedCount);
+        
+        return result;
+    } catch (Exception e) {
+        throw new Exception("Error deleting Postman test users: " + e.getMessage());
+    }
+}
 }

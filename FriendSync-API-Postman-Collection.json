@@ -1,0 +1,1310 @@
+{
+  "info": {
+    "name": "FriendSync API - Fixed Tests",
+    "description": "Complete API collection with corrected automated tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://project03-friendsync-backend-8c893d18fe37.herokuapp.com",
+      "type": "string"
+    },
+    {
+      "key": "userId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "friendId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "eventId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "rsvpId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "friendshipId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "userPrefsId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "User Routes",
+      "item": [
+        {
+          "name": "Create User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 201 or 200', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "// Save userId from response",
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        var userId = jsonData.id || jsonData.userId || jsonData.uid;",
+                  "        if (userId) {",
+                  "            pm.collectionVariables.set('userId', userId);",
+                  "            console.log('Saved userId:', userId);",
+                  "        }",
+                  "    } catch(e) {",
+                  "        console.log('Could not parse response:', e);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser{{$randomInt}}\",\n  \"password\": \"password123\",\n  \"email\": \"testuser{{$randomInt}}@example.com\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get User by Username",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/username/testuser",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "username", "testuser"]
+            }
+          }
+        },
+        {
+          "name": "Login User",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "pm.test('Response time is less than 2000ms', function () {",
+                  "    pm.expect(pm.response.responseTime).to.be.below(2000);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"username\": \"testuser\",\n  \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/users/login",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users", "login"]
+            }
+          }
+        },
+        {
+          "name": "Get All Users",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is an array', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "users"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Friend Routes",
+      "item": [
+        {
+          "name": "Send Friend Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 201', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "// Save friendshipId",
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        var friendshipId = jsonData.id || jsonData.friendshipId;",
+                  "        if (friendshipId) {",
+                  "            pm.collectionVariables.set('friendshipId', friendshipId);",
+                  "            console.log('Saved friendshipId:', friendshipId);",
+                  "        }",
+                  "    } catch(e) {",
+                  "        console.log('Could not parse response:', e);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"friendId\": \"{{friendId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/friends/request",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "friends", "request"]
+            }
+          }
+        },
+        {
+          "name": "Accept Friend Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/friends/{{friendshipId}}/accept",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "friends", "{{friendshipId}}", "accept"]
+            }
+          }
+        },
+        {
+          "name": "Get User's Friends",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is an array', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/friends/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "friends", "user", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Pending Friend Requests",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is an array', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/friends/pending/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "friends", "pending", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Remove Friend",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 204', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/friends/{{friendshipId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "friends", "{{friendshipId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Event Routes",
+      "item": [
+        {
+          "name": "Create Event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 201', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "// Save eventId",
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        var eventId = jsonData.id || jsonData.eventId;",
+                  "        if (eventId) {",
+                  "            pm.collectionVariables.set('eventId', eventId);",
+                  "            console.log('Saved eventId:', eventId);",
+                  "        }",
+                  "    } catch(e) {",
+                  "        console.log('Could not parse response:', e);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventTitle\": \"Team Meeting\",\n  \"description\": \"Weekly team sync\",\n  \"userId\": \"{{userId}}\",\n  \"isEvent\": true,\n  \"startTime\": \"2024-12-15T10:00:00\",\n  \"endTime\": \"2024-12-15T11:00:00\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "events"]
+            }
+          }
+        },
+        {
+          "name": "Get Event by ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/{{eventId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "events", "{{eventId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get User's Events",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is an array', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "events", "user", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Events by Type",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is an array', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/type/true",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "events", "type", "true"]
+            }
+          }
+        },
+        {
+          "name": "Get All Events",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is an array', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/events",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "events"]
+            }
+          }
+        },
+        {
+          "name": "Update Event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventTitle\": \"Updated Team Meeting\",\n  \"description\": \"Updated weekly team sync\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/events/{{eventId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "events", "{{eventId}}"]
+            }
+          }
+        },
+        {
+          "name": "Delete Event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 204', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/events/{{eventId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "events", "{{eventId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "RSVP Routes",
+      "item": [
+        {
+          "name": "Send Single Invitation",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 201', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "// Save rsvpId",
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        var rsvpId = jsonData.id || jsonData.rsvpId;",
+                  "        if (rsvpId) {",
+                  "            pm.collectionVariables.set('rsvpId', rsvpId);",
+                  "            console.log('Saved rsvpId:', rsvpId);",
+                  "        }",
+                  "    } catch(e) {",
+                  "        console.log('Could not parse response:', e);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventId\": \"{{eventId}}\",\n  \"userId\": \"{{friendId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rsvps/invite",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rsvps", "invite"]
+            }
+          }
+        },
+        {
+          "name": "Send Bulk Invitations",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 201', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"eventId\": \"{{eventId}}\",\n  \"userIds\": [\"{{userId}}\", \"{{friendId}}\"]\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rsvps/invite/bulk",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rsvps", "invite", "bulk"]
+            }
+          }
+        },
+        {
+          "name": "Update RSVP Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"yes\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/rsvps/{{rsvpId}}/status",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rsvps", "{{rsvpId}}", "status"]
+            }
+          }
+        },
+        {
+          "name": "Get RSVPs for Event",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is an array', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rsvps/event/{{eventId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rsvps", "event", "{{eventId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get RSVPs by Status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is an array', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rsvps/event/{{eventId}}/status/yes",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rsvps", "event", "{{eventId}}", "status", "yes"]
+            }
+          }
+        },
+        {
+          "name": "Get User's Invitations",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is an array', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rsvps/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rsvps", "user", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Pending Invitations",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is an array', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rsvps/user/{{userId}}/pending",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rsvps", "user", "{{userId}}", "pending"]
+            }
+          }
+        },
+        {
+          "name": "Get RSVP Summary",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rsvps/event/{{eventId}}/summary",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rsvps", "event", "{{eventId}}", "summary"]
+            }
+          }
+        },
+        {
+          "name": "Delete RSVP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 204', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/rsvps/{{rsvpId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rsvps", "{{rsvpId}}"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "User Preferences Routes",
+      "item": [
+        {
+          "name": "Create User Preferences (Custom)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 201', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});",
+                  "",
+                  "// Save userPrefsId",
+                  "if (pm.response.code === 200 || pm.response.code === 201) {",
+                  "    try {",
+                  "        var jsonData = pm.response.json();",
+                  "        var userPrefsId = jsonData.id || jsonData.prefsId;",
+                  "        if (userPrefsId) {",
+                  "            pm.collectionVariables.set('userPrefsId', userPrefsId);",
+                  "            console.log('Saved userPrefsId:', userPrefsId);",
+                  "        }",
+                  "    } catch(e) {",
+                  "        console.log('Could not parse response:', e);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\",\n  \"theme\": \"dark\",\n  \"notifications\": true,\n  \"colorScheme\": \"blue\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/user-prefs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user-prefs"]
+            }
+          }
+        },
+        {
+          "name": "Create User Preferences (Default)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 201', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 201]);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userId\": \"{{userId}}\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/user-prefs/default",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user-prefs", "default"]
+            }
+          }
+        },
+        {
+          "name": "Get Preferences by User ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user-prefs/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user-prefs", "user", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get Preferences by Prefs ID",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user-prefs/{{userPrefsId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user-prefs", "{{userPrefsId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Multiple Preferences",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"theme\": \"light\",\n  \"notifications\": false,\n  \"colorScheme\": \"green\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/user-prefs/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user-prefs", "user", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Update Theme Only",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"theme\": \"dark\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/user-prefs/user/{{userId}}/theme",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user-prefs", "user", "{{userId}}", "theme"]
+            }
+          }
+        },
+        {
+          "name": "Update Notifications Only",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"notifications\": true\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/user-prefs/user/{{userId}}/notifications",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user-prefs", "user", "{{userId}}", "notifications"]
+            }
+          }
+        },
+        {
+          "name": "Update Color Scheme Only",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is valid JSON', function () {",
+                  "    pm.response.to.be.json;",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"colorScheme\": \"purple\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/user-prefs/user/{{userId}}/color-scheme",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user-prefs", "user", "{{userId}}", "color-scheme"]
+            }
+          }
+        },
+        {
+          "name": "Delete User Preferences",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200 or 204', function () {",
+                  "    pm.expect(pm.response.code).to.be.oneOf([200, 204]);",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user-prefs/user/{{userId}}",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user-prefs", "user", "{{userId}}"]
+            }
+          }
+        },
+        {
+          "name": "Get All User Preferences (Admin)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "pm.test('Status code is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response is an array', function () {",
+                  "    var jsonData = pm.response.json();",
+                  "    pm.expect(jsonData).to.be.an('array');",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/user-prefs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "user-prefs"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
