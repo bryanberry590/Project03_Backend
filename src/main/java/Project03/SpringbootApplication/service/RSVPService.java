@@ -251,4 +251,23 @@ public class RSVPService {
         
         return summary;
     }
+
+        /**
+     * Get all RSVPs (admin function)
+     * Returns all RSVP records regardless of event or user
+     */
+    public List<Map<String, Object>> getAllRSVPs() throws ExecutionException, InterruptedException {
+        
+        ApiFuture<QuerySnapshot> query = firestore.collection("rsvps").get();
+        QuerySnapshot querySnapshot = query.get();
+        
+        List<Map<String, Object>> rsvps = new ArrayList<>();
+        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+            Map<String, Object> rsvp = document.getData();
+            rsvp.put("rsvpId", document.getId());
+            rsvps.add(rsvp);
+        }
+        return rsvps;
+    }
+
 }

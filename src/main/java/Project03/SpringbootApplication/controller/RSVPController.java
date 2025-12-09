@@ -160,4 +160,17 @@ public class RSVPController {
         }
         return response;
     }
+
+        /**
+     * GET /api/rsvps - Get all RSVPs (admin)
+     * Returns all RSVP records regardless of event or user
+     */
+    @GetMapping
+    public List<Map<String, Object>> getAllRSVPs() {
+        try {
+            return rsvpService.getAllRSVPs();
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching all RSVPs: " + e.getMessage());
+        }
+    }
 }

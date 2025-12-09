@@ -100,4 +100,19 @@ public class FriendsController {
         }
         return response;
     }
+
+        /**
+     * GET /api/friends - Get all friendships (admin)
+     * Returns all friendship records regardless of user
+     */
+    @GetMapping
+    public List<Map<String, Object>> getAllFriendships() {
+        try {
+            return friendsService.getAllFriendships();
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching all friendships: " + e.getMessage());
+        }
+    }
+
+
 }

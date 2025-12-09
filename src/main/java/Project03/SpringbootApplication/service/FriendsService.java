@@ -170,4 +170,23 @@ public class FriendsService {
 
         return "Friend removed successfully";
     }
+
+    /**
+     * Get all friendships (admin function)
+     * Returns all friendship records regardless of user
+     */
+    public List<Map<String, Object>> getAllFriendships() 
+            throws ExecutionException, InterruptedException {
+        
+        ApiFuture<QuerySnapshot> query = firestore.collection("friends").get();
+        QuerySnapshot querySnapshot = query.get();
+        
+        List<Map<String, Object>> friendships = new ArrayList<>();
+        for (DocumentSnapshot document : querySnapshot.getDocuments()) {
+            Map<String, Object> friendship = document.getData();
+            friendship.put("id", document.getId());
+            friendships.add(friendship);
+        }
+        return friendships;
+    }
 }
