@@ -161,9 +161,11 @@ public class RSVPService {
      */
     public List<Map<String, Object>> getUserInvitations(String userId) 
             throws ExecutionException, InterruptedException {
+
+        Long userIdNum = Long.parseLong(userId);
         
         Query query = firestore.collection("rsvps")
-                .whereEqualTo("inviteRecipientId", userId);
+                .whereEqualTo("inviteRecipientId", userIdNum);
         
         ApiFuture<QuerySnapshot> querySnapshot = query.get();
         
