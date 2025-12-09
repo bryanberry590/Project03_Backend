@@ -131,6 +131,11 @@ public class BaseController {
                                     <td class="route">/api/users</td>
                                     <td>Get all users</td>
                                 </tr>
+                                <tr>
+                                    <td><span class="method delete">DELETE</span></td>
+                                    <td class="route">/api/users/{id}</td>
+                                    <td>Delete user by ID (and all related data)</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -392,6 +397,10 @@ curl -X POST http://localhost:8080/api/users/login \\
 curl -X POST http://localhost:8080/api/events \\
   -H "Content-Type: application/json" \\
   -d '{"eventTitle":"Meeting","description":"Team sync","userId":"USER_ID","isEvent":true}'</pre>
+                        
+                        <p><strong>4. Delete a user:</strong></p>
+                        <pre style="background-color: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto;">
+curl -X DELETE http://localhost:8080/api/users/USER_ID</pre>
                     </div>
 
                     <footer style="text-align: center; margin-top: 40px; color: #666; font-size: 14px;">
